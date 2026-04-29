@@ -30,7 +30,7 @@ exports.handler = async function (event, context) {
 
     /* ── Fetch "Staff Data" sheet ─────────────────────────── */
     const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.1hH2ZFhpFMA-gsiW3qxAvXBzp846HDAo6nexFYk8Gyhk,
+    spreadsheetId: process.env.SPREADSHEET_ID,
       range: 'Staff Data',  // Reads the whole sheet
     });
 
