@@ -1,0 +1,8 @@
+{
+  "name": "absence-form",
+  "version": "1.0.0",
+  "description": "Absence form hosted on Netlify with Google Sheets backend",
+  "dependencies": {
+    "googleapis": "^144.0.0"
+  }
+}

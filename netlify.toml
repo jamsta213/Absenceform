@@ -1,0 +1,10 @@
+# netlify.toml
+# Tells Netlify where to find the serverless functions.
+
+[functions]
+  directory = "netlify/functions"
+
+# Optional: if you add a build step later (e.g. for bundling)
+# [build]
+#   command = "npm install"
+#   publish = "."
