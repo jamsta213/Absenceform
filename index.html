@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <base target="_top">
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>Absence Form</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+
+    /* GLOBAL MOBILE OPTIMIZATION */
+
+    body, html {
+
+      font-family: 'DM Sans', sans-serif;
+
+      background: #FAF8F4;
+
+      color: #1C1C1A;
+
+      margin: 0;
+
+      padding: 0;
+
+      overflow-x: hidden;
+
+      width: 100%;
+
+      position: relative;
+
+    }
+
+   
+
+    .container {
+
+      padding: 30px 15px;
+
+      text-align: center;
+
+      max-width: 500px;
+
+      margin: 0 auto;
+
+      box-sizing: border-box;
+
+    }
+
+   
+
+    .logo-header { width: 100%; max-width: 280px; margin: 0 auto 20px auto; display: block; height: auto; }
+
+    h1 { font-size: 28px; font-weight: 700; margin-bottom: 30px; line-height: 1.1; color: #2D5F3F; }
+
+   
+
+    .form-step { display: none; }
+
+    .form-step.active { display: block; }
+
+   
+
+    .field { margin-bottom: 30px; text-align: left; width: 100%; }
+
+    label { display: block; font-size: 20px; font-weight: 700; margin-bottom: 10px; color: #444; }
+
+ 
+
+    /* INPUTS - Fixed 16px to prevent iOS Zoom */
+
+    select, input {
+
+      width: 100%;
+
+      max-width: 100%;
+
+      height: 60px;
+
+      padding: 0 15px;
+
+      border: 2px solid #D8D4CC;
+
+      border-radius: 12px;
+
+      font-size: 16px;
+
+      font-weight: 700;
+
+      box-sizing: border-box;
+
+      background-color: #ffffff !important;
+
+      color: #1C1C1A !important;
+
+      outline: none;
+
+      display: block;
+
+    }
+
+ 
+
+    select { appearance: auto; -webkit-appearance: menulist; }
+
+ 
+
+    input[type="date"], input[type="time"] {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      min-width: 0;
+
+      line-height: 1.2;
+
+      -webkit-appearance: none;
+
+    }
+
+   
+
+    input::-webkit-date-and-time-value { text-align: left; width: 100%; }
+
+ 
+
+    /* BUTTONS */
+
+    .btn-next, .btn-submit { width: 100%; height: 70px; border: none; border-radius: 12px; font-size: 24px; font-weight: 700; cursor: pointer; background: #2D5F3F; color: #FFFFFF; margin-top: 10px; touch-action: manipulation; }
+
+    .btn-back { width: 100%; height: 70px; border: none; border-radius: 12px; font-size: 24px; font-weight: 700; cursor: pointer; background: #E8E6E1; color: #1C1C1A; margin-top: 10px; touch-action: manipulation; }
+
+   
+
+    /* CHECKBOX CARDS */
+
+    .confirm-card { display: flex; align-items: center; border: 2px solid #D8D4CC; padding: 15px; border-radius: 15px; margin-bottom: 10px; background: #FFF; cursor: pointer; transition: 0.2s; touch-action: manipulation; }
+
+    .confirm-card input[type="checkbox"] { width: 25px; height: 25px; margin-right: 15px; flex-shrink: 0; accent-color: #FFF; }
+
+    .confirm-label { font-size: 16px; font-weight: 700; line-height: 1.2; }
+
+    .confirm-card.selected { background: #007AFF !important; border-color: #007AFF !important; color: #FFF !important; }
+
+ 
+
+    /* DUTY GRID */
+
+    .duty-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+
+    .duty-chip { padding: 12px 5px; border: 2px solid #D8D4CC; border-radius: 12px; font-size: 13px; font-weight: 700; background: #fff; display: flex; align-items: center; justify-content: center; min-height: 50px; cursor: pointer; transition: 0.2s; text-align: center; touch-action: manipulation; }
+
+    .duty-chip.selected { background: #007AFF !important; color: #FFFFFF !important; border-color: #007AFF !important; }
+
+   
+
+    .other-input { margin-top: 10px; display: none; }
+
+    #dutyValidationAnchor { width: 100%; height: 0; opacity: 0; border: none; pointer-events: none; position: absolute; }
+
+  </style>
+
+</head>
+
+<body>
+
+ 
+
+<div class="container">
+
+  <img src="https://drive.google.com/thumbnail?id=12KWoJLRUDRozds2VcJM_WXwbz80fGeV3&sz=w1000" class="logo-header">
+
+ 
+
+  <form id="mainForm" onsubmit="return false;">
+
+    <div id="step1" class="form-step active">
+
+      <h1>Absence Form</h1>
+
+      <div class="field">
+
+        <label>Full Name</label>
+
+        <select id="nameSelect" required><option value="">Select Name</option></select>
+
+      </div>
+
+      <div class="field">
+
+        <label>Site</label>
+
+        <select id="siteSelect" required><option value="">Select Site</option></select>
+
+      </div>
+
+      <div class="field">
+
+        <label>Absence Type</label>
+
+        <select id="absType" required>
+
+          <option value="">Select...</option>
+
+          <option value="Sickness">Sickness</option>
+
+          <option value="Special Leave">Special Leave</option>
+
+          <option value="Unpaid Leave">Unpaid Leave</option>
+
+        </select>
+
+      </div>
+
+      <button type="button" class="btn-next" onclick="validateStep(1)">Next Step</button>
+
+    </div>
+
+ 
+
+    <div id="step2-sickness" class="form-step">
+
+      <h1>Sickness Details</h1>
+
+      <div class="field">
+
+        <label>Reason</label>
+
+        <select id="sickReason" onchange="toggleOther(this, 'otherSickText')">
+
+          <option value="">Choose...</option>
+
+          <option>Musculo-skeletal: Back & neck</option>
+
+          <option>Other Musculo: legs, arms</option>
+
+          <option>Eyes, ears, nose, dental</option>
+
+          <option>Chest, respiratory</option>
+
+          <option>Heart, blood pressure</option>
+
+          <option>Infectious: cold, flu</option>
+
+          <option>Headache, migraine</option>
+
+          <option>Stress, anxiety</option>
+
+          <option>Genito-urinary, menstrural problems</option>
+
+          <option>Stomach, vomiting, diarrhoea</option>
+
+          <option value="other">Other</option>
+
+        </select>
+
+        <input type="text" id="otherSickText" class="other-input" placeholder="Please specify sickness reason">
+
+      </div>
+
+      <div class="field">
+
+        <label class="confirm-card"><input type="checkbox" onchange="styleCard(this)"><span class="confirm-label">I confirm I am fit to return to work and this is a true and accurate statement</span></label>
+
+        <label class="confirm-card"><input type="checkbox" onchange="styleCard(this)"><span class="confirm-label">I understand I must speak my line manager to confirm my return as soon as I return to school</span></label>
+
+        <label class="confirm-card"><input type="checkbox" onchange="styleCard(this)"><span class="confirm-label">I understand that failure to speak to a senior leader on my return could lead to disciplinary action</span></label>
+
+      </div>
+
+      <button type="button" class="btn-next" onclick="validateStep(2)">Next Step</button>
+
+      <button type="button" class="btn-back" onclick="changeStep('step1')">Back</button>
+
+    </div>
+
+ 
+
+    <div id="step2-leave" class="form-step">
+
+      <h1 id="leaveTitle">Leave Details</h1>
+
+      <div class="field">
+
+        <label>Reason</label>
+
+        <select id="leaveReason" onchange="showLeaveInfo()">
+
+          <option value="">Choose...</option>
+
+          <option>Doc/Hos App</option>
+
+          <option>Funeral/Bereavement</option>
+
+          <option>Training</option>
+
+          <option>Childcare</option>
+
+          <option>Maternity related</option>
+
+          <option>Religious Leave</option>
+
+          <option value="other">Other</option>
+
+        </select>
+
+        <div id="leaveInfoBox" class="other-input">
+
+          <label id="leaveInfoLabel" style="font-size: 16px; margin-top: 10px;">More Information</label>
+
+          <input type="text" id="otherLeaveText" placeholder="Please provide details">
+
+        </div>
+
+      </div>
+
+      <div class="field">
+
+        <label class="confirm-card"><input type="checkbox" onchange="styleCard(this)"><span class="confirm-label">I have spoken to my line manager regarding this request before filling out this form</span></label>
+
+      </div>
+
+      <div class="field">
+
+        <label>Cover Status</label>
+
+        <select id="coverStatus" onchange="toggleCoverModule()">
+
+          <option value="none">No cover needed</option>
+
+          <option value="arranged">I have arranged cover</option>
+
+        </select>
+
+      </div>
+
+ 
+
+      <div id="coverModule" style="display:none; position:relative;">
+
+        <label>Duties Needing Cover</label>
+
+        <input type="text" id="dutyValidationAnchor">
+
+        <div class="duty-grid">
+
+          <div class="duty-chip" onclick="toggleDuty(this)">Before school duty</div>
+
+          <div class="duty-chip" onclick="toggleDuty(this)">Morning break duty</div>
+
+          <div class="duty-chip" onclick="toggleDuty(this)">Lunch duty</div>
+
+          <div class="duty-chip" onclick="toggleDuty(this)">Afternoon play duty</div>
+
+          <div class="duty-chip" onclick="toggleDuty(this)">After school club</div>
+
+          <div class="duty-chip" onclick="toggleDuty(this)">Trip</div>
+
+          <div class="duty-chip" onclick="toggleDuty(this)">Swimming</div>
+
+          <div class="duty-chip" onclick="toggleDuty(this)">Meeting</div>
+
+          <div class="duty-chip" onclick="toggleDuty(this)">Class cover</div>
+
+          <div class="duty-chip" onclick="toggleDuty(this)">General event</div>
+
+          <div class="duty-chip" onclick="toggleDuty(this)">1-1 with child</div>
+
+          <div class="duty-chip" onclick="toggleDuty(this, true)">Other:</div>
+
+        </div>
+
+        <input type="text" id="otherDutyText" class="other-input" placeholder="Specify other duty">
+
+        <div class="field">
+
+          <label>Covered by:</label>
+
+          <input type="text" id="whoCover" placeholder="Name of staff covering">
+
+        </div>
+
+      </div>
+
+ 
+
+      <button type="button" class="btn-next" onclick="validateStep(2)">Next Step</button>
+
+      <button type="button" class="btn-back" onclick="changeStep('step1')">Back</button>
+
+    </div>
+
+ 
+
+    <div id="step3-form" class="form-step">
+
+      <h1>Dates & Times</h1>
+
+      <div class="field">
+
+        <label>First Day</label>
+
+        <input type="date" id="start" required onchange="syncDates()">
+
+      </div>
+
+      <div class="field">
+
+        <label>Last Day</label>
+
+        <input type="date" id="end" required onchange="validateDates()">
+
+      </div>
+
+      <div class="field">
+
+        <label>Duration</label>
+
+        <select id="dayType" onchange="toggleHalf()">
+
+          <option value="full">Full Day</option>
+
+          <option value="half">Half Day</option>
+
+        </select>
+
+      </div>
+
+      <div id="halfDaySection" style="display:none;">
+
+        <div class="field">
+
+          <label>Time Out</label>
+
+          <input type="time" id="out">
+
+        </div>
+
+        <div class="field">
+
+          <label>Time Return</label>
+
+          <input type="time" id="ret">
+
+        </div>
+
+      </div>
+
+      <button type="button" class="btn-submit" id="submitBtn" onclick="submitForm()">Submit Request</button>
+
+      <button type="button" class="btn-back" onclick="goBack()">Back</button>
+
+    </div>
+
+  </form>
+
+</div>
+
+ 
+
+<script>
+
+  var staffData = [];
+
+ 
+
+  window.onload = function() {
+
+    google.script.run.withSuccessHandler(function(data) {
+
+      staffData = data;
+
+      var ns = document.getElementById('nameSelect');
+
+      var ss = document.getElementById('siteSelect');
+
+      data.forEach(p => ns.add(new Option(p.name, p.name)));
+
+      var uniqueSites = [...new Set(data.map(p => p.site).filter(s => s && s !== ""))];
+
+      uniqueSites.sort().forEach(s => { ss.add(new Option(s, s)); });
+
+    }).getStaffData();
+
+  };
+
+ 
+
+  function styleCard(cb) {
+
+    cb.parentElement.classList.toggle('selected', cb.checked);
+
+  }
+
+ 
+
+  function toggleOther(el, id) {
+
+    var box = document.getElementById(id);
+
+    box.style.display = (el.value === 'other') ? 'block' : 'none';
+
+  }
+
+ 
+
+  function showLeaveInfo() {
+
+    var val = document.getElementById('leaveReason').value;
+
+    document.getElementById('leaveInfoBox').style.display = (val !== "") ? 'block' : 'none';
+
+  }
+
+ 
+
+  function toggleCoverModule() {
+
+    var isArranged = document.getElementById('coverStatus').value === 'arranged';
+
+    document.getElementById('coverModule').style.display = isArranged ? 'block' : 'none';
+
+  }
+
+ 
+
+  function toggleDuty(el, isOther) {
+
+    el.classList.toggle('selected');
+
+    document.getElementById('dutyValidationAnchor').setCustomValidity("");
+
+    if (isOther) {
+
+      document.getElementById('otherDutyText').style.display = el.classList.contains('selected') ? 'block' : 'none';
+
+    }
+
+  }
+
+ 
+
+  function toggleHalf() {
+
+    document.getElementById('halfDaySection').style.display = document.getElementById('dayType').value === 'half' ? 'block' : 'none';
+
+  }
+
+ 
+
+  function syncDates() {
+
+    var startInput = document.getElementById('start');
+
+    var endInput = document.getElementById('end');
+
+    if (startInput.value) {
+
+      endInput.value = startInput.value;
+
+      endInput.min = startInput.value;
+
+    }
+
+    validateDates();
+
+  }
+
+ 
+
+  function validateDates() {
+
+    var start = document.getElementById('start');
+
+    var end = document.getElementById('end');
+
+    if (start.value && end.value && end.value < start.value) {
+
+       end.setCustomValidity("Last day cannot be before First day");
+
+    } else {
+
+       end.setCustomValidity("");
+
+    }
+
+  }
+
+ 
+
+  function changeStep(id) {
+
+    document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+
+    document.getElementById(id).classList.add('active');
+
+    window.scrollTo(0,0);
+
+  }
+
+ 
+
+  function validateStep(s) {
+
+    var type = document.getElementById('absType').value;
+
+    if (s === 1) {
+
+      var n = document.getElementById('nameSelect'), si = document.getElementById('siteSelect'), at = document.getElementById('absType');
+
+      if (!n.reportValidity() || !si.reportValidity() || !at.reportValidity()) return;
+
+      document.getElementById('leaveTitle').textContent = type;
+
+      changeStep(type === 'Sickness' ? 'step2-sickness' : 'step2-leave');
+
+      return;
+
+    }
+
+    if (type === 'Sickness') {
+
+      var r = document.getElementById('sickReason'), ot = document.getElementById('otherSickText');
+
+      if (!r.value) { r.setCustomValidity("Please select a reason"); r.reportValidity(); return; } else { r.setCustomValidity(""); }
+
+      if (r.value === 'other' && !ot.value) { ot.setCustomValidity("Please specify"); ot.reportValidity(); return; } else { ot.setCustomValidity(""); }
+
+      var checks = document.querySelectorAll('#step2-sickness input[type="checkbox"]');
+
+      for (var i=0; i<checks.length; i++) {
+
+        if (!checks[i].checked) { checks[i].setCustomValidity("Please confirm this statement"); checks[i].reportValidity(); return; }
+
+        else { checks[i].setCustomValidity(""); }
+
+      }
+
+    } else {
+
+      var lr = document.getElementById('leaveReason'), lot = document.getElementById('otherLeaveText');
+
+      if (!lr.value) { lr.setCustomValidity("Please select a reason"); lr.reportValidity(); return; } else { lr.setCustomValidity(""); }
+
+      if (lr.value === 'other' && !lot.value) { lot.setCustomValidity("Please provide details"); lot.reportValidity(); return; } else { lot.setCustomValidity(""); }
+
+      var conf = document.querySelector('#step2-leave input[type="checkbox"]');
+
+      if (!conf.checked) { conf.setCustomValidity("Please confirm selection"); conf.reportValidity(); return; } else { conf.setCustomValidity(""); }
+
+      if (document.getElementById('coverStatus').value === 'arranged') {
+
+        if (document.querySelectorAll('.duty-chip.selected').length === 0) {
+
+          var anchor = document.getElementById('dutyValidationAnchor');
+
+          anchor.setCustomValidity("Please select at least one duty.");
+
+          anchor.reportValidity(); return;
+
+        }
+
+        var wc = document.getElementById('whoCover');
+
+        if (!wc.value) { wc.setCustomValidity("Please specify name"); wc.reportValidity(); return; } else { wc.setCustomValidity(""); }
+
+      }
+
+    }
+
+    changeStep('step3-form');
+
+  }
+
+ 
+
+  function goBack() {
+
+    var type = document.getElementById('absType').value;
+
+    changeStep(type === 'Sickness' ? 'step2-sickness' : 'step2-leave');
+
+  }
+
+ 
+
+  function submitForm() {
+
+    var start = document.getElementById('start'), end = document.getElementById('end');
+
+    var dayType = document.getElementById('dayType').value;
+
+    var tOut = document.getElementById('out');
+
+    var tRet = document.getElementById('ret');
+
+   
+
+    validateDates();
+
+ 
+
+    if (!start.reportValidity() || !end.reportValidity()) return;
+
+   
+
+    // MANDATORY TIME LOGIC FOR HALF DAY
+
+    if (dayType === 'half') {
+
+      if (!tOut.value) {
+
+        tOut.setCustomValidity("Time Out is required for half days");
+
+        tOut.reportValidity();
+
+        return;
+
+      } else { tOut.setCustomValidity(""); }
+
+     
+
+      if (!tRet.value) {
+
+        tRet.setCustomValidity("Time Return is required for half days");
+
+        tRet.reportValidity();
+
+        return;
+
+      } else { tRet.setCustomValidity(""); }
+
+    }
+
+   
+
+    var btn = document.getElementById('submitBtn');
+
+    btn.disabled = true; btn.textContent = 'Submitting...';
+
+ 
+
+    var dutiesArr = Array.from(document.querySelectorAll('.duty-chip.selected')).map(el => el.textContent);
+
+    var otherDuty = document.getElementById('otherDutyText').value;
+
+    if (otherDuty && document.getElementById('otherDutyText').style.display !== 'none') dutiesArr.push(otherDuty);
+
+ 
+
+    var payload = {
+
+      name: document.getElementById('nameSelect').value,
+
+      site: document.getElementById('siteSelect').value,
+
+      absType: document.getElementById('absType').value,
+
+      sickReason: document.getElementById('sickReason').value === 'other' ? document.getElementById('otherSickText').value : document.getElementById('sickReason').value,
+
+      leaveReason: document.getElementById('leaveReason').value ? (document.getElementById('leaveReason').value + ": " + document.getElementById('otherLeaveText').value) : '',
+
+      coverStatus: document.getElementById('coverStatus').value,
+
+      duties: dutiesArr.join(', '),
+
+      whoCover: document.getElementById('whoCover').value,
+
+      start: start.value,
+
+      end: end.value,
+
+      dayType: dayType,
+
+      timeOut: tOut.value,
+
+      timeReturn: tRet.value
+
+    };
+
+ 
+
+    google.script.run.withSuccessHandler(function() {
+
+      alert('Request submitted successfully!');
+
+      location.reload();
+
+    }).withFailureHandler(function(err) {
+
+      alert('Error: ' + err.message);
+
+      btn.disabled = false; btn.textContent = 'Submit Request';
+
+    }).submitAbsence(payload);
+
+  }
+
+</script>
+
+</body>
+
+</html>
